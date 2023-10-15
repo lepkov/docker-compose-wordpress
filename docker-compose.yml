@@ -7,6 +7,7 @@ services:
       dockerfile: Dockerfile
     environment:
         MYSQL_ROOT_PASSWORD: my_password
+        MYSQL_USER_PASSWORD: my_password
         MYSQL_PASSWORD: my_password
         MYSQL_DATABASE: my_database     
         MYSQL_USER: user
