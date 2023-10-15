@@ -13,6 +13,8 @@ services:
         MYSQL_USER: user
         MYSQL_CHARSET: utf8mb4
         MYSQL_COLLATION: utf8mb4_unicode_ci
+      volumes:
+        - ./app/logs:/var/log/mysql/
     networks:
       - wp_dev_network
 
