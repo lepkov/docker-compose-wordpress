@@ -1,10 +1,11 @@
 # docker-compose-wordpress
 
-### Infra for developing a WordPress site with needed php extensions
+### Infra for developing a WordPress site that includes all needed PHP extensions
 Contains: PHP 7.4 + Apache2.4 + MariaDB 10.6 + phpMyAdmin
 
-## Start infra
+## Manage infra
 `docker-compose up -d`
+`docker-compose down`
 
 ## Upload a WordPress Website
 * Go to 'localhost:8081'
