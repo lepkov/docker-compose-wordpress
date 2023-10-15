@@ -9,7 +9,7 @@ FROM mariadb:10.6
 # ENV MYSQL_USER: user
 
 # Copy the SQL dump file to the container
-COPY easy_dump.sql /docker-entrypoint-initdb.d/
+#COPY easy_dump.sql /docker-entrypoint-initdb.d/
 
 # Set the character set and collation for Russian language
 # ENV MYSQL_CHARSET=utf8mb4
