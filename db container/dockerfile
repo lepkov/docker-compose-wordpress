@@ -1,0 +1,30 @@
+FROM mariadb:10.6
+
+#RUN apt-get update -y && apt-get upgrade -y
+
+# Set the root password
+# ENV MYSQL_ROOT_PASSWORD=my_password
+# ENV MYSQL_DATABASE: my_database
+# ENV MYSQL_PASSWORD: my_password
+# ENV MYSQL_USER: user
+
+# Copy the SQL dump file to the container
+COPY easy_dump.sql /docker-entrypoint-initdb.d/
+
+# Set the character set and collation for Russian language
+# ENV MYSQL_CHARSET=utf8mb4
+# ENV MYSQL_COLLATION=utf8mb4_unicode_ci
+
+# Update the MySQL configuration file
+RUN echo "[mysqld]" >> /etc/mysql/conf.d/docker.cnf
+RUN echo "character_set_server=utf8mb4" >> /etc/mysql/conf.d/docker.cnf
+RUN echo "collation-server=utf8mb4_unicode_ci" >> /etc/mysql/conf.d/docker.cnf
+
+# Optional: Set the time zone
+ENV TZ=Europe/Moscow
+
+# Set appropriate file permissions
+RUN chown -R mysql:mysql /docker-entrypoint-initdb.d
+
+# Start the MariaDB service
+CMD ["mysqld"]

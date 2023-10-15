@@ -1,0 +1,49 @@
+version: '3.1'
+services:
+  db:
+    container_name: dev-wp-db-container
+    build:
+      context: ./db container
+      dockerfile: Dockerfile
+    environment:
+        MYSQL_ROOT_PASSWORD: my_password
+        MYSQL_PASSWORD: my_password
+        MYSQL_DATABASE: my_database     
+        MYSQL_USER: user
+        MYSQL_CHARSET: utf8mb4
+        MYSQL_COLLATION: utf8mb4_unicode_ci
+    networks:
+      - wp_dev_network
+
+  phpmyadmin:
+    #localhost:8081 root/MYSQL_ROOT_PASSWORD
+    container_name: phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    ports:
+        - '8081:80'
+    environment:
+        PMA_HOST: db
+    depends_on:
+        - db
+    networks:
+      - wp_dev_network
+
+  webserver:
+    container_name: dev-wp-webserver-container
+    build:
+      context: ./webserver container
+      dockerfile: Dockerfile    
+    ports:
+      - '80:80'
+    volumes:
+      - ./app:/var/www/html
+      - ./app/logs:/var/log/apache2/
+    depends_on:
+      - db
+    networks:
+      - wp_dev_network
+
+networks:
+  wp_dev_network:
+
+  

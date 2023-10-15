@@ -1,0 +1,22 @@
+FROM php:7.4-apache
+
+RUN apt-get update -y && apt-get upgrade -y
+RUN apt-get install libpng-dev libjpeg-dev libtiff-dev libmagickwand-dev libmagickcore-dev imagemagick -y
+
+# Install necessary extensions
+RUN docker-php-ext-install mysqli opcache intl shmop 
+RUN pecl install imagick apcu igbinary 
+RUN docker-php-ext-enable imagick apcu igbinary mysqli opcache intl shmop 
+
+# Enable Apache modules
+RUN a2enmod rewrite alias authz_host deflate dir expires headers mime rewrite autoindex negotiation setenvif && service apache2 restart
+
+COPY apache.conf /etc/apache2/sites-available/000-default.conf
+
+# Set appropriate file permissions
+RUN chown -R www-data:www-data /var/www/html
+RUN chmod -R 755 /var/www/html
+
+EXPOSE 80
+
+CMD ["apache2-foreground"]
