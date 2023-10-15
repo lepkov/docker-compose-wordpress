@@ -12,3 +12,5 @@ Contains: PHP 7.4 + Apache2 + MariaDB + phpMyAdmin
 * Upload your exported DB
 * Upload the website's root dir into the `/app` folder
 * Make changes to the `wp-config.php` with the new DB credentials
+
+Apache `access.log` and `error.log` are in the `/app/log` folder
