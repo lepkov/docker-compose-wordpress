@@ -5,6 +5,7 @@ Contains: PHP 7.4 + Apache2.4 + MariaDB 10.6 + phpMyAdmin
 
 ## Manage infra
 `docker-compose up -d`
+
 `docker-compose down`
 
 ## Upload a WordPress Website
