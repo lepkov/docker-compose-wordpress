@@ -1,6 +1,6 @@
 # docker-compose-wordpress
 
-### Infra for developing a WordPress website that includes all needed PHP extensions
+### Simple Infra/Hosting for developing and troubleshooting a WordPress website that includes all needed PHP extensions 
 Contains: PHP 7.4-FPM + Apache2.4 + MariaDB 10.6 + phpMyAdmin
 
 ## Manage infra
@@ -20,6 +20,11 @@ define( 'WP_SITEURL', 'http://localhost' );
 ```
 * Make changes in `.htaccess` in paths if they exist
 * Open `localhost` in the browser to check your website
+## Logs
+Apache `apache-access.log` and `apache-error.log` are in the `/app/logs` folder.
 
-Apache `access.log` and `error.log` are in the `/app/logs` folder
-No php flags in `.htaccess`, since it is php-fpm, they should be in /etc/php/8.0/fpm/pool.d/example.com.conf - TODO paste the actual path.
+MariaDB `mariadb-slow.log` is in the `/app/logs` folder.
+
+PHP-FPM `php-fpm-error.log` is in the `/app/logs` folder.
+
+FYI: No php flags in `.htaccess`, since it is php-fpm, they should be in /etc/php/8.0/fpm/pool.d/example.com.conf - TODO paste the actual path.
