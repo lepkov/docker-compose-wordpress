@@ -22,3 +22,4 @@ define( 'WP_SITEURL', 'http://localhost' );
 * Open `localhost` in the browser to check your website
 
 Apache `access.log` and `error.log` are in the `/app/logs` folder
+No php flags in `.htaccess`, since it is php-fpm, they should be in /etc/php/8.0/fpm/pool.d/example.com.conf - TODO paste the actual path.
