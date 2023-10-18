@@ -1,0 +1,21 @@
+FROM php:7.4-fpm
+
+# Install OS packages
+RUN apt-get update -y && apt-get upgrade -y
+RUN apt-get install libpng-dev libjpeg-dev libtiff-dev libmagickwand-dev libmagickcore-dev imagemagick -y
+RUN apt-get install locales apt-utils g++ libicu-dev libpng-dev libxml2-dev libzip-dev libonig-dev libxslt-dev unzip libfreetype6-dev libjpeg62-turbo-dev -y
+
+# Install PHP extensions
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg
+RUN docker-php-ext-configure intl
+RUN docker-php-ext-install mysqli opcache intl shmop zip calendar dom mbstring gd xsl 
+RUN pecl install imagick apcu igbinary 
+RUN docker-php-ext-enable imagick apcu igbinary mysqli opcache intl shmop zip calendar dom mbstring gd xsl 
+
+# Use php.ini prod sample
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+
+RUN mkdir /var/log/php
+
+# Enable error log
+RUN sed -i 's/;error_log = php_errors.log/error_log = \/var\/log\/php\/php-fpm-error.log/g' /usr/local/etc/php/php.ini
