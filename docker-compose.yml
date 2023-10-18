@@ -1,10 +1,13 @@
-version: '3.1'
+#TODO: enable catching slow php scripts and use of phpinidir
+version: '3.8'
 services:
   db:
     container_name: dev-wp-db-container
     build:
       context: ./db container
       dockerfile: Dockerfile
+    ports:
+      - '3306:3306'
     environment:
         MYSQL_ROOT_PASSWORD: my_password
         MYSQL_USER_PASSWORD: my_password
@@ -13,8 +16,37 @@ services:
         MYSQL_USER: user
         MYSQL_CHARSET: utf8mb4
         MYSQL_COLLATION: utf8mb4_unicode_ci
-      volumes:
+    volumes:
         - ./app/logs:/var/log/mysql/
+    networks:
+      - wp_dev_network
+  
+  php-fpm:
+    container_name: dev-wp-php-fpm-container
+    build:
+      context: ./php container
+      dockerfile: Dockerfile  
+    ports:
+      - '9000:9000'
+    volumes:
+      - ./app:/var/www/html
+      - ./app/logs:/var/log/php/
+    networks:
+      - wp_dev_network
+
+  webserver:
+    container_name: dev-wp-webserver-container
+    build:
+      context: ./webserver container
+      dockerfile: Dockerfile    
+    ports:
+      - '80:80'
+    volumes:
+      - ./app:/var/www/html
+      - ./app/logs:/var/log/apache2/
+    depends_on:
+      - db
+      - php-fpm
     networks:
       - wp_dev_network
 
@@ -33,22 +65,5 @@ services:
     networks:
       - wp_dev_network
 
-  webserver:
-    container_name: dev-wp-webserver-container
-    build:
-      context: ./webserver container
-      dockerfile: Dockerfile    
-    ports:
-      - '80:80'
-    volumes:
-      - ./app:/var/www/html
-      - ./app/logs:/var/log/apache2/
-    depends_on:
-      - db
-    networks:
-      - wp_dev_network
-
 networks:
   wp_dev_network:
-
-  
