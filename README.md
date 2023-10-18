@@ -1,7 +1,7 @@
 # docker-compose-wordpress
 
 ### Infra for developing a WordPress website that includes all needed PHP extensions
-Contains: PHP 7.4 + Apache2.4 + MariaDB 10.6 + phpMyAdmin
+Contains: PHP 7.4-FPM + Apache2.4 + MariaDB 10.6 + phpMyAdmin
 
 ## Manage infra
 `docker-compose up -d`
