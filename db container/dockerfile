@@ -12,7 +12,7 @@ RUN echo "slow_query_log = 1" >> /etc/mysql/conf.d/docker.cnf
 RUN echo "slow_query_log_file = /var/log/mysql/mariadb-slow.log" >> /etc/mysql/conf.d/docker.cnf
 RUN echo "long_query_time = 1" >> /etc/mysql/conf.d/docker.cnf
 
-# Optimize MariaDB for the Wordpress (https://www.cloudservices.store/cp/index.php/knowledgebase/63/Tune-MySQL-or-mariadb-database-for-WooCommerce-and-WordPress.html)
+# Tune MariaDB for the Wordpress (https://www.cloudservices.store/cp/index.php/knowledgebase/63/Tune-MySQL-or-mariadb-database-for-WooCommerce-and-WordPress.html)
 RUN echo "innodb_buffer_pool_size=512M" >> /etc/mysql/conf.d/docker.cnf 
 # SQL QUERY TO CHECK: SHOW VARIABLES LIKE '%innodb_buffer_pool_size%';
 RUN echo "query_cache_limit=8M" >> /etc/mysql/conf.d/docker.cnf 
