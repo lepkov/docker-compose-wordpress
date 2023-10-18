@@ -1,4 +1,5 @@
 FROM php:7.4-fpm
+# https://hub.docker.com/_/php
 
 # Install OS packages
 RUN apt-get update -y && apt-get upgrade -y
@@ -19,3 +20,6 @@ RUN mkdir /var/log/php
 
 # Enable error log
 RUN sed -i 's/;error_log = php_errors.log/error_log = \/var\/log\/php\/php-fpm-error.log/g' /usr/local/etc/php/php.ini
+
+# Tune PHP-FPM for performance
+RUN sed -i 's/pm.max_children = 5/pm.max_children = 15/g' /usr/local/etc/php-fpm.d/www.conf
