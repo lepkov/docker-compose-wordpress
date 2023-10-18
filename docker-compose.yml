@@ -12,11 +12,12 @@ services:
         MYSQL_ROOT_PASSWORD: my_password
         MYSQL_USER_PASSWORD: my_password
         MYSQL_PASSWORD: my_password
-        MYSQL_DATABASE: my_database     
+        #MYSQL_DATABASE: my_database     
         MYSQL_USER: user
         MYSQL_CHARSET: utf8mb4
         MYSQL_COLLATION: utf8mb4_unicode_ci
     volumes:
+        - ./app/mysql:/var/lib/mysql #persistent databases on rebuild/restart
         - ./app/logs:/var/log/mysql/
     networks:
       - wp_dev_network
@@ -29,7 +30,7 @@ services:
     ports:
       - '9000:9000'
     volumes:
-      - ./app:/var/www/html
+      - ./app/public_html:/var/www/html
       - ./app/logs:/var/log/php/
     networks:
       - wp_dev_network
@@ -42,7 +43,7 @@ services:
     ports:
       - '80:80'
     volumes:
-      - ./app:/var/www/html
+      - ./app/public_html:/var/www/html
       - ./app/logs:/var/log/apache2/
     depends_on:
       - db
