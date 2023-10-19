@@ -2,6 +2,7 @@
 
 ### Simple Infra/Hosting for developing and troubleshooting a WordPress website that includes all needed PHP extensions 
 Contains: PHP 7.4-FPM + Apache 2.4 + MariaDB 10.6 + phpMyAdmin
+Also contains Lightspeed and PHP 7.4 container which can be used instead of PHP 7.4-FPM + Apache 2.4 (comment it in the docker-compose)
 ![image](https://github.com/lepkov/docker-compose-wordpress/assets/23506790/985566ca-a193-4d48-9c8c-5d70cbf022fa)
 
 
