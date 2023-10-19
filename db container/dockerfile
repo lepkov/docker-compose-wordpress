@@ -1,6 +1,8 @@
 FROM mariadb:10.6
 # https://hub.docker.com/_/mariadb
-#RUN apt-get update -y && apt-get upgrade -y
+RUN apt-get update -y
+RUN apt-get install htop mytop nano sudo -y
+# mytop u root -p my_password -d newlepko_lepkov_shop
 
 # Update the MySQL configuration file
 RUN echo "[mysqld]" >> /etc/mysql/conf.d/docker.cnf

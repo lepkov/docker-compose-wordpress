@@ -1,4 +1,5 @@
-#TODO: enable catching slow php scripts and use of phpinidir
+#TODO: fix slow php scripts, phpinidir
+# consider https://github.com/litespeedtech/ols-docker-env/blob/master/docker-compose.yml
 version: '3.8'
 services:
   db:
@@ -7,7 +8,7 @@ services:
       context: ./db container
       dockerfile: Dockerfile
     ports:
-      - '3306:3306'
+      - 3306:3306
     environment:
         MYSQL_ROOT_PASSWORD: my_password
         MYSQL_USER_PASSWORD: my_password
@@ -16,44 +17,69 @@ services:
         MYSQL_USER: user
         MYSQL_CHARSET: utf8mb4
         MYSQL_COLLATION: utf8mb4_unicode_ci
+    command: --max_allowed_packet=256M
     volumes:
-        - ./app/mysql:/var/lib/mysql #persistent databases on rebuild/restart
-        - ./app/logs:/var/log/mysql/
+        - ./app/mysql:/var/lib/mysql # persistent databases on rebuild/restart
+        - ./app/logs:/var/log/mysql
+    restart: always
     networks:
       - wp_dev_network
   
-  php-fpm:
-    container_name: dev-wp-php-fpm-container
-    build:
-      context: ./php container
-      dockerfile: Dockerfile  
-    ports:
-      - '9000:9000'
-    volumes:
-      - ./app/public_html:/var/www/html
-      - ./app/logs:/var/log/php/
-    networks:
-      - wp_dev_network
+  # php-fpm:
+  #   container_name: dev-wp-php-fpm-container
+  #   build:
+  #     context: ./php container
+  #     dockerfile: Dockerfile  
+  #   ports:
+  #     - 9000:9000
+  #   volumes:
+  #     - ./app/public_html:/var/www/html
+  #     - ./app/logs:/var/log/php
+  #   cap_add:
+  #     - SYS_PTRACE # for catching slow logs
+  #   restart: always
+  #   networks:
+  #     - wp_dev_network
 
-  webserver:
-    container_name: dev-wp-webserver-container
+  # apache2_webserver:
+  #   container_name: dev-wp-apache-container
+  #   build:
+  #     context: ./apache2 container
+  #     dockerfile: Dockerfile    
+  #   ports:
+  #     - 80:80
+  #   volumes:
+  #     - ./app/public_html:/var/www/html
+  #     - ./app/logs:/var/log/apache2
+  #   depends_on:
+  #     - db
+  #     - php-fpm
+  #   restart: always
+  #   networks:
+  #     - wp_dev_network
+
+  litespeed_webserver:
+    # Webadmin (localhost:7080) admin/my_password
+    # Can be used instead of apache2_webserver and php-fpm (comment them)
+    container_name: dev-wp-litespeed-container
     build:
-      context: ./webserver container
-      dockerfile: Dockerfile    
-    ports:
-      - '80:80'
+      context: ./litespeed container
+      dockerfile: Dockerfile   
     volumes:
-      - ./app/public_html:/var/www/html
-      - ./app/logs:/var/log/apache2/
-    depends_on:
-      - db
-      - php-fpm
+       - ./app/public_html:/var/www/vhosts/localhost/html
+       - ./app/logs:/usr/local/lsws/logs/
+    ports:
+      - 80:80
+      - 7080:7080    
+    environment:
+      TZ: Europe/Moscow
+    restart: always
     networks:
       - wp_dev_network
 
   phpmyadmin:
-    #localhost:8081 root/MYSQL_ROOT_PASSWORD
-    container_name: phpmyadmin
+    # localhost:8081 root/MYSQL_ROOT_PASSWORD
+    container_name: dev-wp-phpmyadmin-container
     image: phpmyadmin/phpmyadmin
     ports:
         - '8081:80'
@@ -63,6 +89,7 @@ services:
         MAX_EXECUTION_TIME: 600
     depends_on:
         - db
+    restart: always
     networks:
       - wp_dev_network
 

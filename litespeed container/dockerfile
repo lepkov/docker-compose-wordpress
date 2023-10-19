@@ -1,0 +1,17 @@
+FROM litespeedtech/openlitespeed:1.7.18-lsphp74
+# https://hub.docker.com/r/litespeedtech/openlitespeed
+
+# Install OS packages
+RUN apt-get update -y
+RUN apt-get install htop nano sudo -y
+
+# Set admin/my_password for webadmin (localhost:7080)
+RUN echo 'admin:$1$Nxxay3q5$gGnsqt0oJAfzQGcKC8aos/' > /usr/local/lsws/admin/conf/htpasswd
+
+# Rename log files
+RUN sed -i 's/errorlog logs\/error.log/errorlog logs\/litespeed-error.log/g' /usr/local/lsws/conf/httpd_config.conf
+RUN sed -i 's/accessLog logs\/access.log/accessLog logs\/litespeed-access.log/g' /usr/local/lsws/conf/httpd_config.conf
+
+RUN sed -i 's/errorlog $VH_ROOT\/logs\/error.log/errorlog $VH_ROOT\/logs\/litespeed-localhost-error.log/g' /usr/local/lsws/conf/vhosts/Example/vhconf.conf
+RUN sed -i 's/logLevel DEBUG/logLevel WARNING/g' /usr/local/lsws/conf/vhosts/Example/vhconf.conf
+RUN sed -i 's/accessLog $VH_ROOT\/logs\/access.log/accessLog $VH_ROOT\/logs\/litespeed-localhost-access.log/g' /usr/local/lsws/conf/vhosts/Example/vhconf.conf

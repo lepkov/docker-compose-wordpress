@@ -32,4 +32,6 @@ MariaDB `mariadb-slow.log` is in the `/app/logs` folder.
 
 PHP-FPM `php-fpm-error.log` is in the `/app/logs` folder.
 
+Litespeed `litespeed-access.log` and `litespeed-error.log` are in the `/app/logs` folder.
+
 FYI: No php flags in `.htaccess`, since it is php-fpm, they should be in /etc/php/8.0/fpm/pool.d/example.com.conf - TODO paste the actual path.
