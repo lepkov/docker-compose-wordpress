@@ -19,6 +19,7 @@ Contains: PHP 7.4-FPM + Apache 2.4 + MariaDB 10.6 + phpMyAdmin
 ```
 define( 'WP_HOME', 'http://localhost' ); 
 define( 'WP_SITEURL', 'http://localhost' );
+define( 'FS_METHOD', 'direct' );
 ```
 * Make changes in `.htaccess` in paths if they exist
 * Open `localhost` in the browser to check your website
