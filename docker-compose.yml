@@ -25,54 +25,35 @@ services:
     networks:
       - wp_dev_network
   
-  # php-fpm:
-  #   container_name: dev-wp-php-fpm-container
-  #   build:
-  #     context: ./php container
-  #     dockerfile: Dockerfile  
-  #   ports:
-  #     - 9000:9000
-  #   volumes:
-  #     - ./app/public_html:/var/www/html
-  #     - ./app/logs:/var/log/php
-  #   cap_add:
-  #     - SYS_PTRACE # for catching slow logs
-  #   restart: always
-  #   networks:
-  #     - wp_dev_network
-
-  # apache2_webserver:
-  #   container_name: dev-wp-apache-container
-  #   build:
-  #     context: ./apache2 container
-  #     dockerfile: Dockerfile    
-  #   ports:
-  #     - 80:80
-  #   volumes:
-  #     - ./app/public_html:/var/www/html
-  #     - ./app/logs:/var/log/apache2
-  #   depends_on:
-  #     - db
-  #     - php-fpm
-  #   restart: always
-  #   networks:
-  #     - wp_dev_network
-
-  litespeed_webserver:
-    # Webadmin (localhost:7080) admin/my_password
-    # Can be used instead of apache2_webserver and php-fpm (comment them)
-    container_name: dev-wp-litespeed-container
+  php-fpm:
+    container_name: dev-wp-php-fpm-container
     build:
-      context: ./litespeed container
-      dockerfile: Dockerfile   
+      context: ./php container
+      dockerfile: Dockerfile  
+    ports:
+      - 9000:9000
     volumes:
-       - ./app/public_html:/var/www/vhosts/localhost/html
-       - ./app/logs:/usr/local/lsws/logs/
+      - ./app/public_html:/var/www/html
+      - ./app/logs:/var/log/php
+    cap_add:
+      - SYS_PTRACE # for catching slow logs
+    restart: always
+    networks:
+      - wp_dev_network
+
+  apache2_webserver:
+    container_name: dev-wp-apache-container
+    build:
+      context: ./apache2 container
+      dockerfile: Dockerfile    
     ports:
       - 80:80
-      - 7080:7080    
-    environment:
-      TZ: Europe/Moscow
+    volumes:
+      - ./app/public_html:/var/www/html
+      - ./app/logs:/var/log/apache2
+    depends_on:
+      - db
+      - php-fpm
     restart: always
     networks:
       - wp_dev_network

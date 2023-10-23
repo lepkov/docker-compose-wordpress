@@ -3,7 +3,6 @@
 ### Simple Infra/Hosting for developing and troubleshooting a WordPress website that includes all needed PHP extensions 
 Contains: PHP 7.4-FPM + Apache 2.4 + MariaDB 10.6 + phpMyAdmin
 
-Also contains Litespeed and PHP 7.4 container which can be used instead of PHP 7.4-FPM + Apache 2.4 (comment it in the docker-compose)
 ![image](https://github.com/lepkov/docker-compose-wordpress/assets/23506790/985566ca-a193-4d48-9c8c-5d70cbf022fa)
 
 
@@ -31,7 +30,5 @@ Apache `apache-access.log` and `apache-error.log` are in the `/app/logs` folder.
 MariaDB `mariadb-slow.log` is in the `/app/logs` folder.
 
 PHP-FPM `php-fpm-error.log` is in the `/app/logs` folder.
-
-Litespeed `litespeed-access.log` and `litespeed-error.log` are in the `/app/logs` folder.
 
 FYI: No php flags in `.htaccess`, since it is php-fpm, they should be in /etc/php/8.0/fpm/pool.d/example.com.conf - TODO paste the actual path.
