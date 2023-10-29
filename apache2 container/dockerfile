@@ -1,17 +1,20 @@
-FROM ubuntu/apache2
 # https://hub.docker.com/r/ubuntu/apache2
+FROM ubuntu/apache2
 
 # Install OS packages
-RUN apt-get update -y && apt-get upgrade -y
+RUN apt-get update -y && \
+    apt-get upgrade -y && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
-# Enable Apache modules
+# Enable Apache modules for WordPress
 RUN a2enmod rewrite proxy_fcgi actions proxy alias authz_host deflate dir expires headers mime autoindex negotiation setenvif && service apache2 restart
 
 COPY apache.conf /etc/apache2/sites-available/000-default.conf
 
 # Set appropriate file permissions
-RUN chown -R www-data:www-data /var/www/html
-RUN chmod -R 755 /var/www/html
+RUN chown -R www-data:www-data /var/www/html && \
+    chmod -R 755 /var/www/html
 
 EXPOSE 80
 
