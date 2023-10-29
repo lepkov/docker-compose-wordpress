@@ -1,5 +1,5 @@
-# docker-compose-wordpress
-
+# docker-compose-wordpress-LAMP
+LAMP = Linux, Apache, MariaDB, PHP
 ### Simple Infra/Hosting for developing and troubleshooting a WordPress website that includes all needed PHP extensions 
 Contains: 
 * PHP 7.4-FPM Container
@@ -8,7 +8,6 @@ Contains:
 * phpMyAdmin Container
 
 ![image](https://github.com/lepkov/docker-compose-wordpress/assets/23506790/985566ca-a193-4d48-9c8c-5d70cbf022fa)
-
 
 ## Manage infra
 `docker-compose up -d`
