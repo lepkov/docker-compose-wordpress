@@ -18,7 +18,7 @@ Contains:
 * Open `localhost:8081` in the browser
 * Login to the phpMyAdmin with `root/my_password`
 * Upload your exported DB
-* Upload the website's root dir into the `/app` folder
+* Upload the website's root dir into the `/app/public_html` folder
 * Make changes to the `wp-config.php` with the new DB credentials and add:
 ```
 define( 'WP_HOME', 'http://localhost' ); 
