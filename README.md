@@ -7,7 +7,7 @@ Contains:
 * MariaDB 10.6 Container
 * phpMyAdmin Container
 
-![image](https://github.com/lepkov/docker-compose-wordpress/assets/23506790/985566ca-a193-4d48-9c8c-5d70cbf022fa)
+![image](https://github.com/lepkov/docker-compose-wordpress-LAMP/assets/23506790/19e287b6-220e-46a7-beec-51bfbc8a49b5)
 
 ## Manage infra
 `docker-compose up -d`
