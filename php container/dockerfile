@@ -1,42 +1,43 @@
-FROM php:7.4-fpm
 # https://hub.docker.com/_/php
+FROM php:7.4-fpm
 
 # Install OS packages
-RUN apt-get update -y
-RUN apt-get install htop nano sudo -y
-RUN apt-get install libpng-dev libjpeg-dev libtiff-dev libmagickwand-dev libmagickcore-dev imagemagick -y
-RUN apt-get install locales apt-utils g++ libicu-dev libpng-dev libxml2-dev libzip-dev libonig-dev libxslt-dev unzip libfreetype6-dev libjpeg62-turbo-dev -y
+RUN apt-get update -y && \
+    apt-get install htop nano sudo -y && \
+    apt-get install libpng-dev libjpeg-dev libtiff-dev libmagickwand-dev libmagickcore-dev imagemagick -y && \
+    apt-get install locales apt-utils g++ libicu-dev libpng-dev libxml2-dev libzip-dev libonig-dev libxslt-dev unzip libfreetype6-dev libjpeg62-turbo-dev -y && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg
-RUN docker-php-ext-configure intl
-RUN docker-php-ext-install mysqli opcache intl shmop zip calendar dom mbstring gd xsl 
-RUN pecl install imagick apcu igbinary 
-RUN docker-php-ext-enable imagick apcu igbinary mysqli opcache intl shmop zip calendar dom mbstring gd xsl 
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg && \
+    docker-php-ext-configure intl && \
+    docker-php-ext-install mysqli opcache intl shmop zip calendar dom mbstring gd xsl && \
+    pecl install imagick apcu igbinary && \
+    docker-php-ext-enable imagick apcu igbinary mysqli opcache intl shmop zip calendar dom mbstring gd xsl 
 
 # Use php.ini prod sample
-RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
-
-RUN mkdir /var/log/php
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" && \
+    mkdir /var/log/php
 
 # Set appropriate file permissions
-RUN chown -R www-data:www-data /var/log/php
-RUN chmod -R 755 /var/log/php
-RUN touch /var/log/php/php-fpm-error.log
-RUN touch /var/log/php/php-fpm-slow.log
-RUN chown -R www-data:www-data /var/www/html
-RUN chmod -R 755 /var/www/html
+RUN chown -R www-data:www-data /var/log/php && \
+    chmod -R 755 /var/log/php && \
+    touch /var/log/php/php-fpm-error.log && \
+    touch /var/log/php/php-fpm-slow.log && \
+    chown -R www-data:www-data /var/www/html && \
+    chmod -R 755 /var/www/html
 
 # Enable error log
-RUN sed -i 's/;error_log = php_errors.log/error_log = \/var\/log\/php\/php-fpm-error.log/g' /usr/local/etc/php/php.ini
+RUN sed -i 's/;error_log = php_errors.log/error_log = \/var\/log\/php\/php-fpm-error.log/g' /usr/local/etc/php/php.ini && \
 
 # Enable slow log
-RUN sed -i 's/;slowlog = log\/$pool.log.slow/slowlog = \/var\/log\/php\/php-fpm-slow.log/g' /usr/local/etc/php-fpm.d/www.conf
-RUN sed -i 's/;request_slowlog_timeout = 0/request_slowlog_timeout = 2s/g' /usr/local/etc/php-fpm.d/www.conf
+    sed -i 's/;slowlog = log\/$pool.log.slow/slowlog = \/var\/log\/php\/php-fpm-slow.log/g' /usr/local/etc/php-fpm.d/www.conf && \
+    sed -i 's/;request_slowlog_timeout = 0/request_slowlog_timeout = 2s/g' /usr/local/etc/php-fpm.d/www.conf && \
 
 # Tune PHP-FPM for performance
-RUN sed -i 's/pm.max_children = 5/pm.max_children = 15/g' /usr/local/etc/php-fpm.d/www.conf
-RUN sed -i 's/pm.start_servers = 2/pm.start_servers = 6/g' /usr/local/etc/php-fpm.d/www.conf
-RUN sed -i 's/pm.min_spare_servers = 1/pm.min_spare_servers = 4/g' /usr/local/etc/php-fpm.d/www.conf
-RUN sed -i 's/pm.max_spare_servers = 3/pm.max_spare_servers = 8/g' /usr/local/etc/php-fpm.d/www.conf
-RUN sed -i 's/pm.max_requests = 200/pm.max_requests = 0/g' /usr/local/etc/php-fpm.d/www.conf
+    sed -i 's/pm.max_children = 5/pm.max_children = 15/g' /usr/local/etc/php-fpm.d/www.conf && \
+    sed -i 's/pm.start_servers = 2/pm.start_servers = 6/g' /usr/local/etc/php-fpm.d/www.conf && \
+    sed -i 's/pm.min_spare_servers = 1/pm.min_spare_servers = 4/g' /usr/local/etc/php-fpm.d/www.conf && \
+    sed -i 's/pm.max_spare_servers = 3/pm.max_spare_servers = 8/g' /usr/local/etc/php-fpm.d/www.conf && \
+    sed -i 's/pm.max_requests = 200/pm.max_requests = 0/g' /usr/local/etc/php-fpm.d/www.conf
